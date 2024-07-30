@@ -31,10 +31,13 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
     - name: Install dependencies
       run: |
         cd {app_path}
-        python -m pip install --upgrade pip
         poetry install
     - name: Run tests
       run: |
@@ -52,10 +55,13 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
     - name: Install dependencies
       run: |
         cd {app_path}
-        python -m pip install --upgrade pip
         poetry install
     - name: Build package
       run: |
@@ -81,10 +87,13 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
     - name: Install dependencies
       run: |
         cd {app_path}
-        python -m pip install --upgrade pip
         poetry install
     - name: Build package
       run: |
@@ -114,10 +123,13 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
     - name: Install dependencies
       run: |
         cd {app_path}
-        python -m pip install --upgrade pip
         poetry install
     - name: Run tests
       run: |
@@ -142,15 +154,29 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
     - name: Install dependencies
       run: |
         cd {app_path}
-        python -m pip install --upgrade pip
         poetry install
     - name: Build package
       run: |
         cd {app_path}
         poetry build
+    - name: Generate changelog
+      run: |
+        gem install github_changelog_generator
+        github_changelog_generator -u ${{{{ github.repository_owner }}}} -p ${{{{ github.event.repository.name }}}} -t ${{{{ secrets.GITHUB_TOKEN }}}}
+    - name: Commit and push changelog
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        git add CHANGELOG.md
+        git commit -m 'Update CHANGELOG.md'
+        git push
     - name: Publish to PyPI
       run: |
         cd {app_path}
