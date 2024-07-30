@@ -3,7 +3,7 @@
 name = "my_shell"
 version = "0.1.0"
 description = "A fastapi driven, pydantic formed, custom shell application with http API"
-authors = ['B', 'r', 'a', 'i', 'n', '-', 'X', ' ', '<', 'g', 'i', 't', 'h', 'u', 'b', '@', 'b', 'r', 'a', 'i', 'n', 'x', '.', 'i', 'o', '>']
+authors = ["Brain-X <github@brain-x.io>"]
 
 packages = [
     { include = "app" },
@@ -11,7 +11,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 fastapi = "^0.70.1"
 uvicorn = "^0.15.0"
 pydantic = "^1.8.2"
@@ -27,3 +27,7 @@ my-shell = "cli.main:cli"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "testpypi"
+url = "https://test.pypi.org/legacy/"
