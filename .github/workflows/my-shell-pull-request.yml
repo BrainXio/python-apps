@@ -1,0 +1,24 @@
+
+name: Pull Request Validation for my_shell
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        cd ./my_shell
+        python -m pip install --upgrade pip
+        poetry install
+    - name: Run tests
+      run: |
+        cd ./my_shell
+        poetry run pytest

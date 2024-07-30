@@ -1,0 +1,88 @@
+
+name: Test and Deploy for my_shell
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        cd ./my_shell
+        python -m pip install --upgrade pip
+        poetry install
+    - name: Run tests
+      run: |
+        cd ./my_shell
+        poetry run pytest
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        cd ./my_shell
+        python -m pip install --upgrade pip
+        poetry install
+    - name: Build package
+      run: |
+        cd ./my_shell
+        poetry build
+    - name: Publish to Test PyPI
+      run: |
+        cd ./my_shell
+        python -m pip install twine
+        poetry publish --build -r testpypi
+      env:
+        TWINE_USERNAME: ${{ secrets.TEST_PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_PASSWORD }}
+
+  publish:
+    if: github.ref == 'refs/heads/main'
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        cd ./my_shell
+        python -m pip install --upgrade pip
+        poetry install
+    - name: Build package
+      run: |
+        cd ./my_shell
+        poetry build
+    - name: Publish to PyPI
+      run: |
+        cd ./my_shell
+        python -m pip install twine
+        poetry publish --build
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
