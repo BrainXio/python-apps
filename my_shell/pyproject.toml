@@ -19,7 +19,7 @@ click = "^8.0.1"
 requests = "^2.26.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.5"
+pytest = "^7.0.0"
 
 [tool.poetry.scripts]
 my-shell = "cli.main:cli"
