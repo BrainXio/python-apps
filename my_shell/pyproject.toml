@@ -1,0 +1,28 @@
+
+[tool.poetry]
+name = "my_shell"
+version = "0.1.0"
+description = "A fastapi driven, pydantic formed, custom shell application with http API"
+authors = ['B', 'r', 'a', 'i', 'n', '-', 'X', ' ', '<', 'g', 'i', 't', 'h', 'u', 'b', '@', 'b', 'r', 'a', 'i', 'n', 'x', '.', 'i', 'o', '>']
+
+packages = [
+    { include = "app" },
+    { include = "cli" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.70.1"
+uvicorn = "^0.15.0"
+pydantic = "^1.8.2"
+click = "^8.0.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+
+[tool.poetry.scripts]
+my-shell = "cli.main:cli"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
