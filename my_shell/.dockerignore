@@ -1,0 +1,17 @@
+
+__pycache__
+*.pyc
+.env
+venv/
+*.egg-info
+build/
+dist/
+.coverage
+.cache
+pytest_cache/
+htmlcov/
+.tox/
+.mypy_cache/
+.ipynb_checkpoints
+poetry.lock
+cython_debug/

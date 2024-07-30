@@ -1,0 +1,56 @@
+
+name: Release for my_shell
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        export PATH="$HOME/.local/bin:$PATH"
+    - name: Install dependencies
+      run: |
+        cd ./my_shell
+        poetry install
+    - name: Build package
+      run: |
+        cd ./my_shell
+        poetry build
+    - name: Generate changelog
+      run: |
+        gem install github_changelog_generator
+        github_changelog_generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} -t ${{ secrets.GITHUB_TOKEN }}
+    - name: Commit and push changelog
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        git add CHANGELOG.md
+        git commit -m 'Update CHANGELOG.md'
+        git push
+    - name: Publish to PyPI
+      run: |
+        cd ./my_shell
+        python -m pip install twine
+        poetry publish --build
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./my_shell
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/my-shell:${{ github.ref_name }}
+        platforms: linux/amd64,linux/arm64
