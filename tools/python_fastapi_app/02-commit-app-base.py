@@ -50,7 +50,7 @@ def main(name):
         f"{name}/Makefile": "Add Makefile for project automation",
     }
     
-    branch_name = f"feature/{name_wirth_dashes}"
+    branch_name = f"feature/{name_with_dashes}"
     create_branch(branch_name)
     
     for filepath, message in commit_messages.items():
