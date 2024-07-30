@@ -3,7 +3,7 @@
 name = "my_shell"
 version = "0.1.0"
 description = "A fastapi driven, pydantic formed, custom shell application with http API"
-authors = ['B', 'r', 'a', 'i', 'n', '-', 'X', ' ', '<', 'g', 'i', 't', 'h', 'u', 'b', '@', 'b', 'r', 'a', 'i', 'n', 'x', '.', 'i', 'o', '>']
+authors = ["Brain-X <github@brain-x.io>"]
 
 packages = [
     { include = "app" },
